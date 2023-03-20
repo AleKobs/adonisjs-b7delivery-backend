@@ -415,3 +415,181 @@ Exemplo de <b> Retorno </b>
   "error": []
 }
 ```
+
+## Produtos
+
+### Buscar todos produtos de determinado tenant - `GET: /:tenantSLUG/products`
+
+Exemplo de <b> Retorno </b>
+
+```json
+{
+  "error": [],
+  "products": [
+    {
+      "id": 1,
+      "category_id": 1,
+      "name": "teste",
+      "category": {
+        "id": 1,
+        "name": "teste"
+      }
+    }
+  ]
+}
+```
+
+### Cadastrar novo produto - `POST: /tenant/products`
+
+Exemplo de requisição
+
+```json
+{
+  "name": "teste",
+  "price": 11,
+  "categoryId": 1,
+  "description": "teste",
+  "img": "default.gif"
+}
+```
+
+Exemplo de <b> Retorno </b>
+
+```json
+{
+  "error": [],
+  "newProduct": {
+    "name": "teste",
+    "category_id": 1,
+    "price": 11,
+    "img": "default.gif",
+    "description": "teste",
+    "id": 2
+  }
+}
+```
+
+### Buscar um único produto por tenant - `GET: /:tenantSLUG/products/:id`
+
+Exemplo de <b> Retorno </b>
+
+```json
+{
+  "error": [],
+  "product": {
+    "id": 1,
+    "category_id": 1,
+    "name": "teste",
+    "category": {
+      "id": 1,
+      "name": "teste"
+    }
+  }
+}
+```
+
+### Atualizar um produto - `PATCH: /tenant/products/:id`
+
+Exemplo de <b> Request </b>
+
+```json
+{
+  "name": "Teste Atualizado",
+  "price": 9.99,
+  "categoryId": 2,
+  "description": "teste com desconto =P",
+  "img": "default.gif"
+}
+```
+
+Exemplo de <b> Retorno </b>
+
+```json
+{
+  "error": [],
+  "newProduct": {
+    "id": 2,
+    "category_id": 2,
+    "name": "Teste Atualizado",
+    "img": "default.gif",
+    "price": 9.99,
+    "description": "teste com desconto =P"
+  }
+}
+```
+
+## Banners / Promoções
+
+### Buscar todas promoções / banners de determinado tenant - `GET: /:tenantSLUG/banners`
+
+Exemplo de <b> Retorno </b>
+
+```json
+{
+  "error": [],
+  "banners": [
+    {
+      "id": 1,
+      "img": "teste.png",
+      "active": true
+    },
+    {
+      "id": 2,
+      "img": "teste2.png",
+      "active": false
+    }
+  ]
+}
+```
+
+### Cadastrar novo banner - `POST: /tenant/banners`
+
+\*Requer auth as a tenant.
+
+Exemplo de requisição
+
+```json
+{
+  "img": "teste2.png",
+  "active": true // true/false - opcional
+}
+```
+
+Exemplo de <b> Retorno </b>
+
+```json
+{
+  "error": [],
+  "newBanner": {
+    "id": 2,
+    "img": "teste2.png",
+    "active": true
+  }
+}
+```
+
+### Atualizar um banner - `PATCH: /tenant/banners/:id`
+
+\*requer auth as a tenant.
+
+Exemplo de <b> Request </b>
+
+```json
+{
+  "img": "teste2_novo_novo_certo_ok_ajustado.png",
+  "active": true
+}
+```
+
+Exemplo de <b> Retorno </b>
+
+```json
+{
+  "error": [],
+  "newBanner": {
+    "id": 2,
+    "img": "teste2_novo_novo_certo_ok_ajustado.png",
+    "active": true
+  }
+}
+```

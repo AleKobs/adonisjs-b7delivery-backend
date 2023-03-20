@@ -105,7 +105,7 @@ export default class AuthController {
       response.unauthorized();
       return;
     }
-    response.json({error: [], user: user, type: user._type})
+    response.json({error: [], data: user, type: user._type})
     return;
   }
 

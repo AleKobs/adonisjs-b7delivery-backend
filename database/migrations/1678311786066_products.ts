@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.string('img')
       table.float('price')
       table.text('description')
+      table.boolean('is_deleted').defaultTo(false);
     })
   }
 

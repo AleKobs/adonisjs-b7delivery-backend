@@ -17,7 +17,10 @@
 | import './routes/customer'
 |
 */
-
+import './routes/tenants';
+import './routes/products';
+import './routes/categories';
+import './routes/checkout';
 import './routes/auth'
 import './routes/user'
 
@@ -28,7 +31,7 @@ Route.get('/', async () => {
 })
 
 
-Route.get('/:tenant/', 'UsersController.index').middleware('tenantRequest');
+
 
 
 

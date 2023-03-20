@@ -13,6 +13,11 @@ export default class CategoriesController {
     response.json({categories})
   }
 
+  public async getAllCategories({ request, response }: HttpContextContract) {
+    const categories = await Category.query().where('tenant_id', request.tenant.id)
+    response.json({error: [], categories});
+  }
+
   public async store({ request, response, auth }: HttpContextContract) {
     const tenant = await auth.user
     const data = await request.validate(NewCategoryValidator);

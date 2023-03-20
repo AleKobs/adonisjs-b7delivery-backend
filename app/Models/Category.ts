@@ -8,7 +8,7 @@ export default class Category extends BaseModel {
   @column()
   public name: string
 
-  @column()
+  @column({serializeAs: null})
   public tenantId: number
 
   @belongsTo(() => Tenant)

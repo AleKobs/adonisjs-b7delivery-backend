@@ -10,6 +10,8 @@ export default class TenantRequest {
   }: HttpContextContract, next: () => Promise<void>) {
 
     const requestTenant = params.tenant;
+
+
     if (!requestTenant) {
       response.status(401).json({
         error: 'Invalid tenant'
@@ -25,7 +27,7 @@ export default class TenantRequest {
       });
       return;
     }
-    request.tenant = requestTenant;
+    request.tenant = databaseTenant;
 
     await next()
   }
