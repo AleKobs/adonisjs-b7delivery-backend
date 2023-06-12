@@ -4,26 +4,28 @@ import User from './User'
 import District from './District'
 
 export default class Address extends BaseModel {
-
   public static table = 'user_addresses'
 
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public street: string
+  public address: string
 
   @column()
-  public street_number: string
+  public number: string
 
   @column()
-  public zipcode: string
+  public cep: string
 
   @column()
   public city: string
 
   @column()
   public state: string
+
+  @column()
+  public neighborhood: string
 
   @column()
   public complement: string
@@ -34,11 +36,9 @@ export default class Address extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @column()
-  public districtId: number
+  // @column()
+  // public districtId: number
 
-  @belongsTo(() => District)
-  public district: BelongsTo<typeof District>
-
-
+  // @belongsTo(() => District)
+  // public district: BelongsTo<typeof District>
 }

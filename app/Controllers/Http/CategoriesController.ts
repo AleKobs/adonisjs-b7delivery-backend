@@ -9,35 +9,47 @@ export default class CategoriesController {
   public async index({ auth, response }: HttpContextContract) {
     const tenant = await auth.user
 
-    const categories = await Category.query().where('tenant_id', tenant!.id)
-    response.json({categories})
+    const categories = await Category.query().where('tenant_id', tenant!.id).preload('products')
+
+    var returnCategories: any[] = []
+    for (const category of categories) {
+      var canDelete = true
+      if (category.products.length > 0) {
+        canDelete = false
+      }
+      const jsonCategory = category.toJSON()
+      delete jsonCategory['products']
+      returnCategories.push({ ...jsonCategory, canDelete })
+    }
+
+    response.json(returnCategories)
   }
 
   public async getAllCategories({ request, response }: HttpContextContract) {
     const categories = await Category.query().where('tenant_id', request.tenant.id)
-    response.json({error: [], categories});
+    response.json({ error: [], categories })
   }
 
   public async store({ request, response, auth }: HttpContextContract) {
     const tenant = await auth.user
-    const data = await request.validate(NewCategoryValidator);
+    const data = await request.validate(NewCategoryValidator)
 
+    const newCategory = await Category.create({ ...data, tenantId: tenant!.id })
 
-    const newCategory = await Category.create({...data, tenantId: tenant!.id});
-
-    response.json({error: [], newCategory})
-
+    response.json({ error: [], newCategory })
   }
 
-  public async update({request, auth, response}: HttpContextContract) {
-    const data = await request.validate(NewCategoryValidator);
-    const tenant = await auth.user;
-    const categoryId = await request.params().id;
+  public async update({ request, auth, response }: HttpContextContract) {
+    const data = await request.validate(NewCategoryValidator)
+    const tenant = await auth.user
+    const categoryId = await request.params().id
 
-
-    const category = await Category.query().where('id', categoryId).where('user_id', tenant!.id).first()
-    await category?.merge(data).save();
-    response.json({error: [], category})
+    const category = await Category.query()
+      .where('id', categoryId)
+      .where('user_id', tenant!.id)
+      .first()
+    await category?.merge(data).save()
+    response.json({ error: [], category })
   }
 
   public async destroy({ request, auth, response }: HttpContextContract) {
@@ -48,7 +60,10 @@ export default class CategoriesController {
       return response.badRequest()
     }
 
-    const address = await Category.query().where('id', categoryId).where('tenant_id', tenant.id).first()
+    const address = await Category.query()
+      .where('id', categoryId)
+      .where('tenant_id', tenant.id)
+      .first()
 
     await address?.delete()
 

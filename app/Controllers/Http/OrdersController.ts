@@ -13,14 +13,16 @@ export default class OrdersController {
     const userId = auth.user!.id
 
     const data = await request.validate(NewOrderValidator)
-    const userAddress = await Address.query()
-      .where('id', data.address_id)
-      .preload('district')
-      .first()
+    const userAddress = await Address.query().where('id', data.address_id).first()
     if (!userAddress) {
       return response.badRequest({ error: [{ mesage: 'Invalid User Address' }] })
     }
-    const delivery_price = userAddress.district.price
+
+    // REFACTOR TO MATCH CEP
+    // const delivery_price = userAddress.district.price
+    const delivery_price = 0
+    //let subtotal = delivery_price
+
     let subtotal = delivery_price
     let productArray = <any>[]
 
@@ -64,7 +66,26 @@ export default class OrdersController {
     return response.json({ error: [], newOrder })
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ params, response, auth }: HttpContextContract) {
+    const orderId = params.id
+    const userId = auth.user!.id
+
+    try {
+      const order = await Order.query()
+        .preload('products', (query) => query.preload('product'))
+        .where('id', orderId)
+        .andWhere('user_id', userId)
+        .first()
+
+      if (!order) {
+        return response.status(404).json({ error: 'Order not found' })
+      }
+
+      return response.json(order)
+    } catch (error) {
+      return response.status(400).json({ error: 'Invalid order' })
+    }
+  }
 
   public async edit({}: HttpContextContract) {}
 

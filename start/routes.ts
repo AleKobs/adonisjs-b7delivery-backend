@@ -17,10 +17,10 @@
 | import './routes/customer'
 |
 */
-import './routes/tenants';
-import './routes/products';
-import './routes/categories';
-import './routes/checkout';
+import './routes/tenants'
+import './routes/products'
+import './routes/categories'
+import './routes/checkout'
 import './routes/auth'
 import './routes/user'
 
@@ -29,9 +29,3 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/', async () => {
   return { hello: 'world' }
 })
-
-
-
-
-
-
